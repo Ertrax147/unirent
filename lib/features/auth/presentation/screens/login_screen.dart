@@ -25,8 +25,9 @@ class LoginScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      body: Column(
-        children: [
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
           // Top curved background
           ClipPath(
             clipper: _TopCurveClipper(),
@@ -64,12 +65,11 @@ class LoginScreen extends ConsumerWidget {
             ),
           ),
           
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                   const SizedBox(height: 24),
                   const Text(
                     '¡Bienvenido!',
@@ -139,7 +139,7 @@ class LoginScreen extends ConsumerWidget {
                     ),
                   ),
                   
-                  const Spacer(),
+                  const SizedBox(height: 32),
                   
                   Center(
                     child: TextButton(
@@ -159,13 +159,12 @@ class LoginScreen extends ConsumerWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                ],
-              ),
+              ],
             ),
           ),
         ],
       ),
-    );
+    ));
   }
 }
 
