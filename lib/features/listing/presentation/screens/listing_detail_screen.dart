@@ -27,14 +27,16 @@ class ListingDetailScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image Carousel (Placeholder)
+            // Image Carousel
             Stack(
               children: [
-                Container(
+                SizedBox(
                   height: 250,
                   width: double.infinity,
-                  color: Colors.grey.shade400,
-                  child: const Center(child: Icon(Icons.photo, size: 64, color: Colors.white)),
+                  child: Image.asset(
+                    'assets/images/prop_${index % 4}.png',
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 Positioned(
                   top: 16,
@@ -153,10 +155,9 @@ class ListingDetailScreen extends ConsumerWidget {
                     ),
                     child: Row(
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           radius: 24,
-                          backgroundColor: Colors.grey.shade300,
-                          child: const Icon(Icons.person, color: Colors.white),
+                          backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
                         ),
                         const SizedBox(width: 16),
                         Expanded(

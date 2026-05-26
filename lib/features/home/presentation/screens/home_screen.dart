@@ -3,16 +3,92 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unirent/features/auth/presentation/providers/auth_provider.dart';
 
-class HomeScreen extends ConsumerWidget {
+import 'package:unirent/features/chat/presentation/screens/chats_list_screen.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  int _selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final isArrendador = authState.user?.role == 'arrendador';
 
+    final Widget homeBody = Column(
+      children: [
+        // Search and Filters
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: 'Buscar arriendo...',
+              prefixIcon: const Icon(Icons.search, color: Colors.grey),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+            ),
+          ),
+        ),
+        
+        // Horizontal Filters (Reactive later)
+        SizedBox(
+          height: 60,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            children: const [
+              _FilterChip(label: 'Precio máx.'),
+              _FilterChip(label: 'Comuna'),
+              _FilterChip(label: 'Tipo'),
+              _FilterChip(label: 'Disponibilidad'),
+            ],
+          ),
+        ),
+        
+        // Listings
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.only(bottom: 80),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return _ListingCardMock(index: index);
+            },
+          ),
+        ),
+      ],
+    );
+
+    Widget getBody() {
+      switch (_selectedIndex) {
+        case 0:
+          return homeBody;
+        case 1:
+          return const Center(child: Text('Favoritos'));
+        case 2:
+          return const ChatsListScreen();
+        case 3:
+          return const Center(child: Text('Perfil'));
+        default:
+          return homeBody;
+      }
+    }
+
     return Scaffold(
-      appBar: AppBar(
+      appBar: _selectedIndex == 0 || _selectedIndex == 1 ? AppBar(
         title: const Text(
           'UniRent',
           style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E3A5F)),
@@ -26,59 +102,9 @@ class HomeScreen extends ConsumerWidget {
           ),
           const SizedBox(width: 8),
         ],
-      ),
-      body: Column(
-        children: [
-          // Search and Filters
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Buscar arriendo...',
-                prefixIcon: const Icon(Icons.search, color: Colors.grey),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
-                ),
-              ),
-            ),
-          ),
-          
-          // Horizontal Filters (Reactive later)
-          SizedBox(
-            height: 60,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              children: const [
-                _FilterChip(label: 'Precio máx.'),
-                _FilterChip(label: 'Comuna'),
-                _FilterChip(label: 'Tipo'),
-                _FilterChip(label: 'Disponibilidad'),
-              ],
-            ),
-          ),
-          
-          // Listings
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.only(bottom: 80),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return _ListingCardMock(index: index);
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: isArrendador
+      ) : null,
+      body: getBody(),
+      floatingActionButton: isArrendador && _selectedIndex == 0
           ? FloatingActionButton(
               backgroundColor: Colors.orange,
               onPressed: () {
@@ -88,9 +114,18 @@ class HomeScreen extends ConsumerWidget {
             )
           : null,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: 0,
+        selectedIndex: _selectedIndex,
         backgroundColor: Colors.white,
-        onDestinationSelected: (idx) {},
+        onDestinationSelected: (idx) {
+          if (idx == 3) {
+            // Profile is still pushed as a full screen
+            context.push('/profile');
+          } else {
+            setState(() {
+              _selectedIndex = idx;
+            });
+          }
+        },
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
@@ -99,14 +134,17 @@ class HomeScreen extends ConsumerWidget {
           ),
           NavigationDestination(
             icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite, color: Color(0xFF1E3A5F)),
             label: 'Favoritos',
           ),
           NavigationDestination(
             icon: Icon(Icons.chat_bubble_outline),
+            selectedIcon: Icon(Icons.chat_bubble, color: Color(0xFF1E3A5F)),
             label: 'Mensajes',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person, color: Color(0xFF1E3A5F)),
             label: 'Perfil',
           ),
         ],
@@ -154,6 +192,7 @@ class _ListingCardMock extends StatelessWidget {
         'location': 'Centro, Temuco',
         'type': 'Individual',
         'rating': '4.8',
+        'image': 'assets/images/prop_0.png',
       },
       {
         'title': 'Departamento amoblado 2 personas',
@@ -161,6 +200,7 @@ class _ListingCardMock extends StatelessWidget {
         'location': 'Pueblo Nuevo, Temuco',
         'type': 'Compartida',
         'rating': '4.5',
+        'image': 'assets/images/prop_1.png',
       },
       {
         'title': 'Pieza con baño privado',
@@ -168,6 +208,7 @@ class _ListingCardMock extends StatelessWidget {
         'location': 'Santa Rosa, Temuco',
         'type': 'Individual',
         'rating': '4.9',
+        'image': 'assets/images/prop_2.png',
       },
       {
         'title': 'Departamento estudio UFRO',
@@ -175,6 +216,7 @@ class _ListingCardMock extends StatelessWidget {
         'location': 'Av. Alemania, Temuco',
         'type': 'Estudio',
         'rating': '4.7',
+        'image': 'assets/images/prop_3.png',
       },
     ];
     
@@ -199,16 +241,17 @@ class _ListingCardMock extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Image Placeholder
-            Container(
-              width: 120,
-              height: 140,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomLeft: Radius.circular(16),
-                ),
+            // Property Image
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                bottomLeft: Radius.circular(16),
+              ),
+              child: Image.asset(
+                item['image']!,
+                width: 120,
+                height: 140,
+                fit: BoxFit.cover,
               ),
             ),
             

@@ -12,6 +12,8 @@ import '../../features/admin/admin_screen.dart';
 import '../../features/listing/presentation/screens/listing_detail_screen.dart';
 import '../../features/listing/presentation/screens/publish_listing_screen.dart';
 import '../../features/listing/rate_user_screen.dart';
+import '../../features/listing/presentation/screens/property_reviews_screen.dart';
+import '../../features/chat/presentation/screens/chat_detail_screen.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -62,6 +64,20 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final userId = state.pathParameters['userId'] ?? '';
           return RateUserScreen(userId: userId);
+        },
+      ),
+      GoRoute(
+        path: '/chat/:id',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return ChatDetailScreen(chatId: id);
+        },
+      ),
+      GoRoute(
+        path: '/listing/:id/reviews',
+        builder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return PropertyReviewsScreen(propertyId: id);
         },
       ),
     ],
