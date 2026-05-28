@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unirent/features/auth/presentation/providers/auth_provider.dart';
+import '../providers/favorites_provider.dart';
+import '../widgets/hover_heart_button.dart';
 
 import 'package:unirent/features/chat/presentation/screens/chats_list_screen.dart';
 
@@ -77,7 +79,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         case 0:
           return homeBody;
         case 1:
-          return const Center(child: Text('Favoritos'));
+          final favoriteIds = ref.watch(favoritesProvider);
+          if (favoriteIds.isEmpty) {
+            return const Center(child: Text('Aún no tienes favoritos.'));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            itemCount: favoriteIds.length,
+            itemBuilder: (context, index) {
+              return _ListingCardMock(index: favoriteIds[index]);
+            },
+          );
         case 2:
           return const ChatsListScreen();
         case 3:
@@ -89,9 +101,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       appBar: _selectedIndex == 0 || _selectedIndex == 1 ? AppBar(
-        title: const Text(
-          'UniRent',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E3A5F)),
+        title: Text(
+          _selectedIndex == 0 ? 'UniRent' : 'Mis Favoritos',
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E3A5F)),
         ),
         actions: [
           IconButton(
@@ -178,13 +190,13 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-class _ListingCardMock extends StatelessWidget {
+class _ListingCardMock extends ConsumerWidget {
   final int index;
   
   const _ListingCardMock({required this.index});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final listings = [
       {
         'title': 'Habitación individual cerca UFRO',
@@ -242,17 +254,32 @@ class _ListingCardMock extends StatelessWidget {
         child: Row(
           children: [
             // Property Image
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                bottomLeft: Radius.circular(16),
-              ),
-              child: Image.asset(
-                item['image']!,
-                width: 120,
-                height: 140,
-                fit: BoxFit.cover,
-              ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
+                  child: Image.asset(
+                    item['image']!,
+                    width: 120,
+                    height: 140,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: HoverHeartButton(index: index, iconSize: 16),
+                  ),
+                ),
+              ],
             ),
             
             // Content

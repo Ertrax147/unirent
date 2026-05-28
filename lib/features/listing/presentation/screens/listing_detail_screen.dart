@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unirent/features/auth/presentation/providers/auth_provider.dart';
+import 'package:unirent/features/home/presentation/providers/favorites_provider.dart';
+import 'package:unirent/features/home/presentation/widgets/hover_heart_button.dart';
 
 class ListingDetailScreen extends ConsumerWidget {
   final int index;
@@ -43,7 +45,13 @@ class ListingDetailScreen extends ConsumerWidget {
                   right: 16,
                   child: Row(
                     children: [
-                      _buildIconButton(Icons.favorite_border),
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: HoverHeartButton(index: index, iconSize: 20, padding: 8.0),
+                      ),
                       const SizedBox(width: 8),
                       _buildIconButton(Icons.share),
                     ],
@@ -179,8 +187,10 @@ class ListingDetailScreen extends ConsumerWidget {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
-                          child: const Text('Ver perfil'),
+                          onPressed: () {
+                            context.push('/rate/user123');
+                          },
+                          child: const Text('Calificar'),
                         ),
                       ],
                     ),
