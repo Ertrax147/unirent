@@ -11,7 +11,7 @@ class AuthRepository {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<UserEntity?> signInWithGoogle() async {
+  Future<UserEntity?> signInWithGoogle({bool isRegister = false}) async {
     try {
       if (kIsWeb) {
         final GoogleAuthProvider googleProvider = GoogleAuthProvider();

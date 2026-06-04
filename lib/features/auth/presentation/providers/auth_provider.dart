@@ -11,14 +11,14 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<UserEntity?> signInWithGoogle() async {
+  Future<UserEntity?> signInWithGoogle({bool isRegister = false}) async {
     await Future.delayed(const Duration(seconds: 1));
     return UserEntity(
       id: 'mock_uid_123',
       email: 'mock@ufromail.cl',
       name: 'Usuario Prueba',
       photoUrl: '',
-      role: 'unassigned',
+      role: isRegister ? 'unassigned' : 'estudiante',
       isPhoneVerified: false,
     );
   }
@@ -94,10 +94,10 @@ class AuthNotifier extends StateNotifier<AuthState> {
     });
   }
 
-  Future<void> signInWithGoogle() async {
+  Future<void> signInWithGoogle({bool isRegister = false}) async {
     state = state.copyWith(status: AuthStatus.authenticating);
     try {
-      final user = await _repository.signInWithGoogle();
+      final user = await _repository.signInWithGoogle(isRegister: isRegister);
       if (user != null) {
         state = state.copyWith(status: AuthStatus.authenticated, user: user);
       } else {

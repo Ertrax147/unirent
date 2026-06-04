@@ -173,15 +173,24 @@ class ListingDetailScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text('María González', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                              Row(
-                                children: [
-                                  const Icon(Icons.star, color: Colors.orange, size: 16),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '4.9 (23 reseñas)',
-                                    style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
-                                  ),
-                                ],
+                              GestureDetector(
+                                onTap: () {
+                                  context.push('/listing/$index/reviews');
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.star, color: Colors.orange, size: 16),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      '4.9 (23 reseñas)',
+                                      style: TextStyle(
+                                        color: Colors.blue.shade600,
+                                        fontSize: 14,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -220,7 +229,9 @@ class ListingDetailScreen extends ConsumerWidget {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: isEstudiante ? () {} : null,
+                onPressed: isEstudiante ? () {
+                  context.push('/chat/chat_123');
+                } : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A5F),
                   foregroundColor: Colors.white,

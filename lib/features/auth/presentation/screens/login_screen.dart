@@ -91,7 +91,7 @@ class LoginScreen extends ConsumerWidget {
                       label: authState.status == AuthStatus.authenticating 
                           ? const CircularProgressIndicator()
                           : const Text(
-                              'Continuar con Google',
+                              'Iniciar sesión con Google',
                               style: TextStyle(color: Colors.black87, fontSize: 16),
                             ),
                       style: OutlinedButton.styleFrom(
@@ -143,14 +143,16 @@ class LoginScreen extends ConsumerWidget {
                   
                   Center(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        ref.read(authStateProvider.notifier).signInWithGoogle(isRegister: true);
+                      },
                       child: const Text.rich(
                         TextSpan(
                           text: '¿Primera vez en UniRent? ',
                           style: TextStyle(color: Colors.black54),
                           children: [
                             TextSpan(
-                              text: 'Crear cuenta',
+                              text: 'Registrar',
                               style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1E3A5F)),
                             ),
                           ],

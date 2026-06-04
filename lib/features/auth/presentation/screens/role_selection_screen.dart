@@ -47,7 +47,7 @@ class _RoleSelectionScreenState extends ConsumerState<RoleSelectionScreen> {
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => context.go('/login'),
         ),
         title: const Text('Crear cuenta', style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: false,
