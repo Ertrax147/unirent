@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1016985675104",
+    "project_id": "unirent-342c7",
+    "storage_bucket": "unirent-342c7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1016985675104:android:2ef5250d49407248a82a05",
+        "android_client_info": {
+          "package_name": "com.example.unirent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIvMRLMXvg2kXSftMDIHW4k7mENM4bidM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1016985675104-436r04es235r0iu69ut8jjbae3a1hf9h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.unirent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

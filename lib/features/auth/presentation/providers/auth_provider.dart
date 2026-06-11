@@ -3,48 +3,8 @@ import '../../domain/entities/user_entity.dart';
 import '../../data/repositories/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class MockAuthRepository implements AuthRepository {
-  @override
-  Stream<User?> get authStateChanges async* {
-    await Future.delayed(const Duration(seconds: 2));
-    yield null;
-  }
-
-  @override
-  Future<UserEntity?> signInWithGoogle({bool isRegister = false}) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return UserEntity(
-      id: 'mock_uid_123',
-      email: 'mock@ufromail.cl',
-      name: 'Usuario Prueba',
-      photoUrl: '',
-      role: isRegister ? 'unassigned' : 'estudiante',
-      isPhoneVerified: false,
-    );
-  }
-
-  @override
-  Future<UserEntity> updateUserRole(String uid, String role) async {
-    await Future.delayed(const Duration(seconds: 1));
-    return UserEntity(
-      id: uid,
-      email: 'mock@ufromail.cl',
-      name: 'Usuario Prueba',
-      photoUrl: '',
-      role: role,
-      isPhoneVerified: false,
-    );
-  }
-
-  @override
-  Future<void> signOut() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-  }
-}
-
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
-  // Use mock for UI testing since Firebase is not fully configured
-  return MockAuthRepository() as AuthRepository;
+  return AuthRepository();
 });
 
 enum AuthStatus { initial, authenticating, authenticated, unauthenticated, error }
@@ -53,18 +13,26 @@ class AuthState {
   final AuthStatus status;
   final UserEntity? user;
   final String? errorMessage;
+  final String? verificationId;
 
-  AuthState({this.status = AuthStatus.initial, this.user, this.errorMessage});
+  AuthState({
+    this.status = AuthStatus.initial, 
+    this.user, 
+    this.errorMessage,
+    this.verificationId,
+  });
 
   AuthState copyWith({
     AuthStatus? status,
     UserEntity? user,
     String? errorMessage,
+    String? verificationId,
   }) {
     return AuthState(
       status: status ?? this.status,
       user: user ?? this.user,
       errorMessage: errorMessage ?? this.errorMessage,
+      verificationId: verificationId ?? this.verificationId,
     );
   }
 }
@@ -119,9 +87,41 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<void> sendSmsCode(String phoneNumber) async {
+    state = state.copyWith(status: AuthStatus.authenticating);
+    try {
+      await _repository.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        onCodeSent: (String verificationId) {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            verificationId: verificationId,
+          );
+        },
+        onVerificationFailed: (FirebaseAuthException e) {
+          state = state.copyWith(status: AuthStatus.error, errorMessage: e.message);
+        },
+      );
+    } catch (e) {
+      state = state.copyWith(status: AuthStatus.error, errorMessage: e.toString());
+    }
+  }
+
+  Future<void> verifySmsCode(String smsCode) async {
+    if (state.verificationId == null) return;
+    
+    state = state.copyWith(status: AuthStatus.authenticating);
+    try {
+      final updatedUser = await _repository.verifySmsCode(state.verificationId!, smsCode);
+      state = state.copyWith(status: AuthStatus.authenticated, user: updatedUser);
+    } catch (e) {
+      state = state.copyWith(status: AuthStatus.error, errorMessage: e.toString());
+    }
+  }
+
   Future<void> signOut() async {
     await _repository.signOut();
-    state = state.copyWith(status: AuthStatus.unauthenticated, user: null);
+    state = state.copyWith(status: AuthStatus.unauthenticated, user: null, verificationId: null);
   }
 }
 

@@ -1,11 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/auth_provider.dart';
 
-class MfaScreen extends StatelessWidget {
+class MfaScreen extends ConsumerStatefulWidget {
   const MfaScreen({super.key});
 
   @override
+  ConsumerState<MfaScreen> createState() => _MfaScreenState();
+}
+
+class _MfaScreenState extends ConsumerState<MfaScreen> {
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _codeController.dispose();
+    super.dispose();
+  }
+
+  void _sendCode() {
+    final phone = _phoneController.text.trim();
+    if (phone.isEmpty) return;
+    
+    // Asumimos el prefijo +569 por el diseño de UI
+    final formattedPhone = '+569$phone';
+    
+    ref.read(authStateProvider.notifier).sendSmsCode(formattedPhone);
+  }
+
+  void _verifyCode() {
+    final code = _codeController.text.trim();
+    if (code.isEmpty) return;
+    
+    ref.read(authStateProvider.notifier).verifySmsCode(code);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authStateProvider);
+
+    ref.listen<AuthState>(authStateProvider, (previous, next) {
+      if (next.status == AuthStatus.error && next.errorMessage != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.errorMessage!)),
+        );
+      } else if (next.status == AuthStatus.authenticated && next.user?.isPhoneVerified == true) {
+        context.go('/home');
+      }
+    });
+
+    final isCodeSent = authState.verificationId != null;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verificación SMS'),
@@ -15,32 +63,47 @@ class MfaScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Ingresa tu número de teléfono',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              isCodeSent ? 'Ingresa el código SMS' : 'Ingresa tu número de teléfono',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Por seguridad, verificamos los perfiles de arrendadores.',
+            Text(
+              isCodeSent 
+                ? 'Hemos enviado un código a tu número.' 
+                : 'Por seguridad, verificamos los perfiles de arrendadores.',
             ),
             const SizedBox(height: 32),
-            TextField(
-              decoration: const InputDecoration(
-                labelText: 'Número de teléfono',
-                prefixText: '+56 9 ',
-                border: OutlineInputBorder(),
+            
+            if (!isCodeSent)
+              TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(
+                  labelText: 'Número de teléfono',
+                  prefixText: '+56 9 ',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+              )
+            else
+              TextField(
+                controller: _codeController,
+                decoration: const InputDecoration(
+                  labelText: 'Código SMS',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                maxLength: 6,
               ),
-              keyboardType: TextInputType.phone,
-            ),
+              
             const Spacer(),
             SizedBox(
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: () {
-                  // Simulate verification success
-                  context.go('/home');
-                },
+                onPressed: authState.status == AuthStatus.authenticating 
+                  ? null 
+                  : (isCodeSent ? _verifyCode : _sendCode),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A5F),
                   foregroundColor: Colors.white,
@@ -48,7 +111,16 @@ class MfaScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Enviar código'),
+                child: authState.status == AuthStatus.authenticating
+                    ? const SizedBox(
+                        height: 20, 
+                        width: 20, 
+                        child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                      )
+                    : Text(
+                        isCodeSent ? 'Verificar código' : 'Enviar código',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                      ),
               ),
             ),
           ],

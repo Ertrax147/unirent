@@ -6,7 +6,11 @@ import '../../domain/entities/user_entity.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    // We pass the Web Client ID explicitly as serverClientId.
+    // This is required on Android/Web to get the idToken for Firebase.
+    serverClientId: '1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com',
+  );
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
@@ -37,7 +41,8 @@ class AuthRepository {
           return await _getUserEntityFromFirestore(user);
         }
       }
-    } catch (e) {
+    } catch (e, stack) {
+      debugPrint('GOOGLE SIGN IN ERROR: $e\n$stack');
       throw Exception('Error en Google Sign-In: $e');
     }
     return null;
@@ -74,5 +79,55 @@ class AuthRepository {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _auth.signOut();
+  }
+
+  Future<void> verifyPhoneNumber({
+    required String phoneNumber,
+    required Function(String verificationId) onCodeSent,
+    required Function(FirebaseAuthException e) onVerificationFailed,
+    Function(PhoneAuthCredential credential)? onVerificationCompleted,
+  }) async {
+    await _auth.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      verificationCompleted: (PhoneAuthCredential credential) {
+        if (onVerificationCompleted != null) {
+          onVerificationCompleted(credential);
+        }
+      },
+      verificationFailed: onVerificationFailed,
+      codeSent: (String verificationId, int? resendToken) {
+        onCodeSent(verificationId);
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
+  Future<UserEntity> verifySmsCode(String verificationId, String smsCode) async {
+    try {
+      final credential = PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
+
+      final user = _auth.currentUser;
+      if (user != null) {
+        // Ensure not already linked
+        bool isLinked = user.providerData.any((userInfo) => userInfo.providerId == 'phone');
+        if (!isLinked) {
+          await user.linkWithCredential(credential);
+        }
+        
+        await _firestore.collection('users').doc(user.uid).update({
+          'isPhoneVerified': true,
+        });
+
+        final doc = await _firestore.collection('users').doc(user.uid).get();
+        return UserEntity.fromJson(doc.data()!);
+      } else {
+        throw Exception("Usuario no autenticado");
+      }
+    } catch (e) {
+      throw Exception("Error verificando código SMS: $e");
+    }
   }
 }
