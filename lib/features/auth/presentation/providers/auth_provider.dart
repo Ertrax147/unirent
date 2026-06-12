@@ -27,12 +27,13 @@ class AuthState {
     UserEntity? user,
     String? errorMessage,
     String? verificationId,
+    bool clearVerificationId = false,
   }) {
     return AuthState(
       status: status ?? this.status,
       user: user ?? this.user,
       errorMessage: errorMessage ?? this.errorMessage,
-      verificationId: verificationId ?? this.verificationId,
+      verificationId: clearVerificationId ? null : (verificationId ?? this.verificationId),
     );
   }
 }
@@ -44,17 +45,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _initAuthListener();
   }
 
+  void clearVerificationId() {
+    state = state.copyWith(clearVerificationId: true);
+  }
+
   void _initAuthListener() {
     _repository.authStateChanges.listen((User? firebaseUser) async {
       if (firebaseUser == null) {
         state = state.copyWith(status: AuthStatus.unauthenticated, user: null);
       } else {
-        // Need to refetch user from Firestore when app starts
+        // Fetch user from Spring Boot quietly on app start.
+        // Si ya estamos autenticando manualmente (ej: signInWithGoogle), dejamos que ese método se encargue
+        if (state.status == AuthStatus.authenticating) {
+          return;
+        }
         try {
-          final userEntity = await _repository.signInWithGoogle(); // or another method to just get firestore data
-          // To avoid infinite loop or calling Google SignIn popup again, we can just fetch the user directly
-          // For simplicity in this provider, we'll wait for the explicit login call to populate state
-          // Or we can expose a _repository.getUserEntity(firebaseUser.uid)
+          final userEntity = await _repository.getUserEntityFromBackend(firebaseUser);
+          state = state.copyWith(status: AuthStatus.authenticated, user: userEntity);
         } catch (e) {
           state = state.copyWith(status: AuthStatus.unauthenticated);
         }
@@ -121,7 +128,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> signOut() async {
     await _repository.signOut();
-    state = state.copyWith(status: AuthStatus.unauthenticated, user: null, verificationId: null);
+    state = state.copyWith(status: AuthStatus.unauthenticated, user: null, clearVerificationId: true);
   }
 }
 

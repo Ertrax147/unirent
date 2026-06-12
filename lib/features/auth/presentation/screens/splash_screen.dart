@@ -33,18 +33,32 @@ class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    // Listen to auth state to redirect
-    ref.listen<AuthState>(authStateProvider, (previous, next) {
-      if (next.status == AuthStatus.unauthenticated) {
+    void redirect(AuthState state) {
+      if (state.status == AuthStatus.unauthenticated) {
         context.go('/login');
-      } else if (next.status == AuthStatus.authenticated && next.user != null) {
-        if (next.user!.role == 'unassigned') {
+      } else if (state.status == AuthStatus.authenticated && state.user != null) {
+        if (state.user!.role == 'unassigned') {
           context.go('/role_selection');
-        } else if (next.user!.role == 'admin') {
+        } else if (state.user!.role == 'arrendador' && !state.user!.isPhoneVerified) {
+          context.go('/mfa');
+        } else if (state.user!.role == 'admin') {
           context.go('/admin');
         } else {
           context.go('/home');
         }
+      }
+    }
+
+    // Listen to changes
+    ref.listen<AuthState>(authStateProvider, (previous, next) {
+      redirect(next);
+    });
+
+    // Check initial state
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final currentState = ref.read(authStateProvider);
+      if (currentState.status != AuthStatus.initial && currentState.status != AuthStatus.authenticating) {
+        redirect(currentState);
       }
     });
 

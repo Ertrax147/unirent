@@ -57,6 +57,16 @@ class _MfaScreenState extends ConsumerState<MfaScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Verificación SMS'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              ref.read(authStateProvider.notifier).signOut();
+              context.go('/login');
+            },
+            tooltip: 'Cerrar sesión',
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -86,14 +96,27 @@ class _MfaScreenState extends ConsumerState<MfaScreen> {
                 keyboardType: TextInputType.phone,
               )
             else
-              TextField(
-                controller: _codeController,
-                decoration: const InputDecoration(
-                  labelText: 'Código SMS',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                maxLength: 6,
+              Column(
+                children: [
+                  TextField(
+                    controller: _codeController,
+                    decoration: const InputDecoration(
+                      labelText: 'Código SMS',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    maxLength: 6,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        ref.read(authStateProvider.notifier).clearVerificationId();
+                      },
+                      child: const Text('¿Te equivocaste de número? Cambiar'),
+                    ),
+                  ),
+                ],
               ),
               
             const Spacer(),

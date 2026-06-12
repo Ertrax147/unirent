@@ -41,46 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD7L8k-XpO6idPrOH6thGkhaqzaLr3XdXs',
-    appId: '1:1016985675104:web:5e05f9de751a1e76a82a05',
-    messagingSenderId: '1016985675104',
-    projectId: 'unirent-342c7',
-    authDomain: 'unirent-342c7.firebaseapp.com',
-    storageBucket: 'unirent-342c7.firebasestorage.app',
+    apiKey: 'AIzaSyAarROnSmiCyYHq__1hp2Ua_Zw7auln7rA',
+    appId: '1:1046855873659:web:37563a9569056f0b155ede',
+    messagingSenderId: '1046855873659',
+    projectId: 'unirent-18b7b',
+    authDomain: 'unirent-18b7b.firebaseapp.com',
+    storageBucket: 'unirent-18b7b.firebasestorage.app',
+    measurementId: 'G-PND7QG5ZFD',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAIvMRLMXvg2kXSftMDIHW4k7mENM4bidM',
-    appId: '1:1016985675104:android:2ef5250d49407248a82a05',
-    messagingSenderId: '1016985675104',
-    projectId: 'unirent-342c7',
-    storageBucket: 'unirent-342c7.firebasestorage.app',
+    apiKey: 'AIzaSyBrB4M5_xGlxVZqBSVxIjUbpEgXS4E2sNw',
+    appId: '1:1046855873659:android:ae012d36204c2bd8155ede',
+    messagingSenderId: '1046855873659',
+    projectId: 'unirent-18b7b',
+    storageBucket: 'unirent-18b7b.firebasestorage.app',
   );
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCfYlFSFKdHap3Wx4IYsuariiqZuV1F0p8',
-    appId: '1:1016985675104:ios:1dd99397d675d8b6a82a05',
-    messagingSenderId: '1016985675104',
-    projectId: 'unirent-342c7',
-    storageBucket: 'unirent-342c7.firebasestorage.app',
-    iosClientId: '1016985675104-436r04es235r0iu69ut8jjbae3a1hf9h.apps.googleusercontent.com',
+    apiKey: 'AIzaSyARnXj7E2JM-W6JqNM8ZkwxFKagypK0NSE',
+    appId: '1:1046855873659:ios:f786ed7a3b04cff0155ede',
+    messagingSenderId: '1046855873659',
+    projectId: 'unirent-18b7b',
+    storageBucket: 'unirent-18b7b.firebasestorage.app',
+    androidClientId: '1046855873659-omqqjt9be3ic78u6bs0rlr16sktbqr45.apps.googleusercontent.com',
+    iosClientId: '1046855873659-gqqiprvllofesl9c6vav7dmg6l1builp.apps.googleusercontent.com',
     iosBundleId: 'com.example.unirent',
   );
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCfYlFSFKdHap3Wx4IYsuariiqZuV1F0p8',
-    appId: '1:1016985675104:ios:1dd99397d675d8b6a82a05',
-    messagingSenderId: '1016985675104',
-    projectId: 'unirent-342c7',
-    storageBucket: 'unirent-342c7.firebasestorage.app',
-    iosClientId: '1016985675104-436r04es235r0iu69ut8jjbae3a1hf9h.apps.googleusercontent.com',
+    apiKey: 'AIzaSyARnXj7E2JM-W6JqNM8ZkwxFKagypK0NSE',
+    appId: '1:1046855873659:ios:f786ed7a3b04cff0155ede',
+    messagingSenderId: '1046855873659',
+    projectId: 'unirent-18b7b',
+    storageBucket: 'unirent-18b7b.firebasestorage.app',
+    iosClientId: '1046855873659-gqqiprvllofesl9c6vav7dmg6l1builp.apps.googleusercontent.com',
     iosBundleId: 'com.example.unirent',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyD7L8k-XpO6idPrOH6thGkhaqzaLr3XdXs',
-    appId: '1:1016985675104:web:740765a77471435ba82a05',
-    messagingSenderId: '1016985675104',
-    projectId: 'unirent-342c7',
-    authDomain: 'unirent-342c7.firebaseapp.com',
-    storageBucket: 'unirent-342c7.firebasestorage.app',
+    apiKey: 'AIzaSyAarROnSmiCyYHq__1hp2Ua_Zw7auln7rA',
+    appId: '1:1046855873659:web:126d365c39dbca59155ede',
+    messagingSenderId: '1046855873659',
+    projectId: 'unirent-18b7b',
+    authDomain: 'unirent-18b7b.firebaseapp.com',
+    storageBucket: 'unirent-18b7b.firebasestorage.app',
+    measurementId: 'G-ZGS8LR2JSD',
   );
 }

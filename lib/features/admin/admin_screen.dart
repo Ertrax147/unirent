@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../data/providers/auth_provider.dart';
+import '../auth/presentation/providers/auth_provider.dart';
 
 class AdminScreen extends ConsumerWidget {
   const AdminScreen({super.key});
@@ -15,7 +15,7 @@ class AdminScreen extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              ref.read(authStateProvider.notifier).logout();
+              ref.read(authStateProvider.notifier).signOut();
               context.go('/login');
             },
           )

@@ -1,17 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../../domain/entities/user_entity.dart';
+import 'package:unirent/core/network/api_client.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: '1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com',
     // We pass the Web Client ID explicitly as serverClientId.
     // This is required on Android/Web to get the idToken for Firebase.
-    serverClientId: '1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com',
+    serverClientId: '1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com',
   );
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  final ApiClient _apiClient = ApiClient();
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -22,7 +24,7 @@ class AuthRepository {
         final UserCredential userCredential = await _auth.signInWithPopup(googleProvider);
         final User? user = userCredential.user;
         if (user != null) {
-          return await _getUserEntityFromFirestore(user);
+          return await getUserEntityFromBackend(user);
         }
       } else {
         final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -38,7 +40,7 @@ class AuthRepository {
         final User? user = userCredential.user;
         
         if (user != null) {
-          return await _getUserEntityFromFirestore(user);
+          return await getUserEntityFromBackend(user);
         }
       }
     } catch (e, stack) {
@@ -48,32 +50,39 @@ class AuthRepository {
     return null;
   }
 
-  Future<UserEntity> _getUserEntityFromFirestore(User user) async {
-    final doc = await _firestore.collection('users').doc(user.uid).get();
+  Future<UserEntity> getUserEntityFromBackend(User user) async {
+    // Send user to Spring Boot backend to sync DB
+    final response = await _apiClient.post('/users/sync', {
+      'uid': user.uid,
+      'phoneNumber': user.phoneNumber ?? '',
+      'email': user.email ?? '',
+      'displayName': user.displayName ?? '',
+      'photoUrl': user.photoURL ?? '',
+    });
     
-    if (doc.exists) {
-      // User exists, return the entity
-      return UserEntity.fromJson(doc.data()!);
-    } else {
-      // New user, create with 'unassigned' role
-      final newUser = UserEntity(
-        id: user.uid,
-        email: user.email ?? '',
-        name: user.displayName ?? 'Usuario',
-        photoUrl: user.photoURL ?? '',
-        role: 'unassigned',
-        isPhoneVerified: false,
-      );
-      
-      await _firestore.collection('users').doc(user.uid).set(newUser.toJson());
-      return newUser;
-    }
+    return UserEntity(
+      id: response['id'],
+      email: user.email ?? '',
+      name: user.displayName ?? 'Usuario',
+      photoUrl: user.photoURL ?? '',
+      role: response['role'] ?? 'unassigned',
+      isPhoneVerified: response['phoneNumber'] != null && response['phoneNumber'].toString().isNotEmpty,
+    );
   }
 
   Future<UserEntity> updateUserRole(String uid, String role) async {
-    await _firestore.collection('users').doc(uid).update({'role': role});
-    final doc = await _firestore.collection('users').doc(uid).get();
-    return UserEntity.fromJson(doc.data()!);
+    final response = await _apiClient.put('/users/$uid/role', {
+      'role': role,
+    });
+    
+    return UserEntity(
+      id: response['id'],
+      email: response['email'] ?? '', 
+      name: response['displayName'] ?? 'Usuario',
+      photoUrl: response['photoUrl'] ?? '',
+      role: response['role'],
+      isPhoneVerified: response['phoneNumber'] != null && response['phoneNumber'].toString().isNotEmpty,
+    );
   }
 
   Future<void> signOut() async {
@@ -114,15 +123,15 @@ class AuthRepository {
         // Ensure not already linked
         bool isLinked = user.providerData.any((userInfo) => userInfo.providerId == 'phone');
         if (!isLinked) {
-          await user.linkWithCredential(credential);
+          await user.linkWithCredential(credential).timeout(const Duration(seconds: 15), onTimeout: () {
+            throw Exception("Tiempo de espera agotado al conectar con Firebase.");
+          });
         }
         
-        await _firestore.collection('users').doc(user.uid).update({
-          'isPhoneVerified': true,
-        });
-
-        final doc = await _firestore.collection('users').doc(user.uid).get();
-        return UserEntity.fromJson(doc.data()!);
+        // Ensure backend is aware
+        await user.reload();
+        final refreshedUser = _auth.currentUser ?? user;
+        return await getUserEntityFromBackend(refreshedUser);
       } else {
         throw Exception("Usuario no autenticado");
       }

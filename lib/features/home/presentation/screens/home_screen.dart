@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:unirent/features/auth/presentation/providers/auth_provider.dart';
 import '../providers/favorites_provider.dart';
 import '../widgets/hover_heart_button.dart';
+import '../../../listing/domain/entities/listing_entity.dart';
+import '../../../listing/presentation/providers/listing_provider.dart';
 
 import 'package:unirent/features/chat/presentation/screens/chats_list_screen.dart';
 
@@ -61,14 +63,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         
-        // Listings
+        // Listings from Spring Boot
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.only(bottom: 80),
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return _ListingCardMock(index: index);
+          child: ref.watch(listingsProvider).when(
+            data: (listings) {
+              if (listings.isEmpty) {
+                return const Center(child: Text('No hay propiedades disponibles.'));
+              }
+              return ListView.builder(
+                padding: const EdgeInsets.only(bottom: 80),
+                itemCount: listings.length,
+                itemBuilder: (context, index) {
+                  return _ListingCard(listing: listings[index], index: index);
+                },
+              );
             },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) => Center(child: Text('Error: $error')),
           ),
         ),
       ],
@@ -87,7 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: favoriteIds.length,
             itemBuilder: (context, index) {
-              return _ListingCardMock(index: favoriteIds[index]);
+              return const Center(child: Text('Favoritos en construcción para backend'));
             },
           );
         case 2:
@@ -190,53 +201,17 @@ class _FilterChip extends StatelessWidget {
   }
 }
 
-class _ListingCardMock extends ConsumerWidget {
+class _ListingCard extends ConsumerWidget {
+  final ListingEntity listing;
   final int index;
   
-  const _ListingCardMock({required this.index});
+  const _ListingCard({required this.listing, required this.index});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listings = [
-      {
-        'title': 'Habitación individual cerca UFRO',
-        'price': '\$280.000/mes',
-        'location': 'Centro, Temuco',
-        'type': 'Individual',
-        'rating': '4.8',
-        'image': 'assets/images/prop_0.png',
-      },
-      {
-        'title': 'Departamento amoblado 2 personas',
-        'price': '\$420.000/mes',
-        'location': 'Pueblo Nuevo, Temuco',
-        'type': 'Compartida',
-        'rating': '4.5',
-        'image': 'assets/images/prop_1.png',
-      },
-      {
-        'title': 'Pieza con baño privado',
-        'price': '\$320.000/mes',
-        'location': 'Santa Rosa, Temuco',
-        'type': 'Individual',
-        'rating': '4.9',
-        'image': 'assets/images/prop_2.png',
-      },
-      {
-        'title': 'Departamento estudio UFRO',
-        'price': '\$350.000/mes',
-        'location': 'Av. Alemania, Temuco',
-        'type': 'Estudio',
-        'rating': '4.7',
-        'image': 'assets/images/prop_3.png',
-      },
-    ];
-    
-    final item = listings[index % listings.length];
-
     return GestureDetector(
       onTap: () {
-        context.push('/listing/$index');
+        context.push('/listing/${listing.id}');
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -262,7 +237,7 @@ class _ListingCardMock extends ConsumerWidget {
                     bottomLeft: Radius.circular(16),
                   ),
                   child: Image.asset(
-                    item['image']!,
+                    listing.imageUrl,
                     width: 120,
                     height: 140,
                     fit: BoxFit.cover,
@@ -290,14 +265,14 @@ class _ListingCardMock extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item['title']!,
+                      listing.title,
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      item['price']!,
+                      listing.price,
                       style: const TextStyle(
                         color: Color(0xFF1E3A5F),
                         fontWeight: FontWeight.bold,
@@ -306,7 +281,7 @@ class _ListingCardMock extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      item['location']!,
+                      listing.location,
                       style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
                     ),
                     const SizedBox(height: 8),
@@ -320,7 +295,7 @@ class _ListingCardMock extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            item['type']!,
+                            listing.type,
                             style: TextStyle(
                               color: Colors.blue.shade800,
                               fontSize: 10,
@@ -333,7 +308,7 @@ class _ListingCardMock extends ConsumerWidget {
                             const Icon(Icons.star, color: Colors.orange, size: 14),
                             const SizedBox(width: 2),
                             Text(
-                              item['rating']!,
+                              listing.rating,
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                             ),
                           ],

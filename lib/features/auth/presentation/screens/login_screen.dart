@@ -14,6 +14,8 @@ class LoginScreen extends ConsumerWidget {
       if (next.status == AuthStatus.authenticated && next.user != null) {
         if (next.user!.role == 'unassigned') {
           context.go('/role_selection');
+        } else if (next.user!.role == 'arrendador' && !next.user!.isPhoneVerified) {
+          context.go('/mfa');
         } else {
           context.go('/home');
         }
@@ -87,7 +89,7 @@ class LoginScreen extends ConsumerWidget {
                     width: double.infinity,
                     height: 56,
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red), // Simplification for Google icon
+                      icon: const Icon(Icons.g_mobiledata, size: 32, color: Colors.red),
                       label: authState.status == AuthStatus.authenticating 
                           ? const CircularProgressIndicator()
                           : const Text(

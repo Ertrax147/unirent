@@ -1,37 +1,81 @@
 {
   "project_info": {
-    "project_number": "1016985675104",
-    "project_id": "unirent-342c7",
-    "storage_bucket": "unirent-342c7.firebasestorage.app"
+    "project_number": "1046855873659",
+    "project_id": "unirent-18b7b",
+    "storage_bucket": "unirent-18b7b.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1016985675104:android:2ef5250d49407248a82a05",
+        "mobilesdk_app_id": "1:1046855873659:android:010ba62ee8429a42155ede",
         "android_client_info": {
           "package_name": "com.example.unirent"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com",
+          "client_id": "1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAIvMRLMXvg2kXSftMDIHW4k7mENM4bidM"
+          "current_key": "AIzaSyBrB4M5_xGlxVZqBSVxIjUbpEgXS4E2sNw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1016985675104-b6poh9slf440ioc9a469tuscflsicmvq.apps.googleusercontent.com",
+              "client_id": "1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1016985675104-436r04es235r0iu69ut8jjbae3a1hf9h.apps.googleusercontent.com",
+              "client_id": "1046855873659-gqqiprvllofesl9c6vav7dmg6l1builp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.unirent"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046855873659:android:ae012d36204c2bd8155ede",
+        "android_client_info": {
+          "package_name": "com.unirent.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1046855873659-omqqjt9be3ic78u6bs0rlr16sktbqr45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.unirent.app",
+            "certificate_hash": "7456f8c8726a1fe10e0a3a55911719d6891ed1ac"
+          }
+        },
+        {
+          "client_id": "1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrB4M5_xGlxVZqBSVxIjUbpEgXS4E2sNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1046855873659-d6jqoih04jiakmli4ce02uegahva99r1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1046855873659-gqqiprvllofesl9c6vav7dmg6l1builp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.unirent"
