@@ -4,16 +4,37 @@ import 'package:go_router/go_router.dart';
 import 'package:unirent/features/auth/presentation/providers/auth_provider.dart';
 import 'package:unirent/features/home/presentation/providers/favorites_provider.dart';
 import 'package:unirent/features/home/presentation/widgets/hover_heart_button.dart';
+import 'package:unirent/features/auth/presentation/providers/user_public_provider.dart';
+import 'package:unirent/features/listing/presentation/providers/listing_provider.dart';
+import 'package:unirent/features/chat/presentation/providers/chat_provider.dart';
 
-class ListingDetailScreen extends ConsumerWidget {
+class ListingDetailScreen extends ConsumerStatefulWidget {
   final int index;
   
   const ListingDetailScreen({super.key, required this.index});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ListingDetailScreen> createState() => _ListingDetailScreenState();
+}
+
+class _ListingDetailScreenState extends ConsumerState<ListingDetailScreen> {
+  bool _isStartingChat = false;
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final isEstudiante = authState.user?.role == 'estudiante';
+    
+    final listingsState = ref.watch(listingsProvider);
+    final listings = listingsState.value ?? [];
+    
+    // Find the specific listing by ID
+    final listing = listings.firstWhere(
+      (l) => l.id == widget.index,
+      orElse: () => throw Exception('Listing not found'),
+    );
+
+    final userPublicState = ref.watch(userPublicProvider(listing.ownerId));
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,10 +56,11 @@ class ListingDetailScreen extends ConsumerWidget {
                 SizedBox(
                   height: 250,
                   width: double.infinity,
-                  child: Image.asset(
-                    'assets/images/prop_${index % 4}.png',
-                    fit: BoxFit.cover,
-                  ),
+                  child: listing.imageUrl != null && listing.imageUrl.isNotEmpty
+                      ? (listing.imageUrl.startsWith('http') 
+                          ? Image.network(listing.imageUrl, fit: BoxFit.cover)
+                          : Image.asset(listing.imageUrl, fit: BoxFit.cover))
+                      : Container(color: Colors.grey.shade300, child: const Center(child: Icon(Icons.image, size: 50, color: Colors.grey))),
                 ),
                 Positioned(
                   top: 16,
@@ -50,23 +72,11 @@ class ListingDetailScreen extends ConsumerWidget {
                           color: Colors.white,
                           shape: BoxShape.circle,
                         ),
-                        child: HoverHeartButton(index: index, iconSize: 20, padding: 8.0),
+                        child: HoverHeartButton(index: widget.index, iconSize: 20, padding: 8.0),
                       ),
                       const SizedBox(width: 8),
                       _buildIconButton(Icons.share),
                     ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text('1/5', style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
@@ -77,13 +87,18 @@ class ListingDetailScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '\$280.000/mes',
-                    style: TextStyle(
+                  Text(
+                    listing.price,
+                    style: const TextStyle(
                       color: Color(0xFF1E3A5F),
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    listing.title,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
                   Row(
@@ -92,7 +107,7 @@ class ListingDetailScreen extends ConsumerWidget {
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
-                          'Av. Francisco Salazar 01145, Centro, Temuco',
+                          listing.location,
                           style: TextStyle(color: Colors.grey.shade700, fontSize: 14),
                         ),
                       ),
@@ -108,7 +123,7 @@ class ListingDetailScreen extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Text(
-                      'Habitación Individual',
+                      listing.type,
                       style: TextStyle(
                         color: Colors.blue.shade800,
                         fontWeight: FontWeight.bold,
@@ -133,7 +148,7 @@ class ListingDetailScreen extends ConsumerWidget {
                   const Text('Descripción', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   Text(
-                    'Habitación luminosa y amoblada a 5 minutos caminando de la Universidad de La Frontera. Incluye cama, escritorio, clóset y calefacción. Baño compartido con un estudiante más. Internet de alta velocidad incluido en el precio.',
+                    'Habitación luminosa y amoblada a 5 minutos caminando de la Universidad. Incluye servicios básicos. Internet de alta velocidad incluido en el precio.',
                     style: TextStyle(color: Colors.grey.shade700, height: 1.5),
                   ),
                   
@@ -155,54 +170,62 @@ class ListingDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 24),
                   const Text('Arrendador', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 24,
-                          backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=5'),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('María González', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                              GestureDetector(
-                                onTap: () {
-                                  context.push('/listing/$index/reviews');
-                                },
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.star, color: Colors.orange, size: 16),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      '4.9 (23 reseñas)',
-                                      style: TextStyle(
-                                        color: Colors.blue.shade600,
-                                        fontSize: 14,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                  userPublicState.when(
+                    data: (userInfo) => Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade200),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: Colors.blue.shade100,
+                            backgroundImage: userInfo['photoUrl'] != null && userInfo['photoUrl'].toString().isNotEmpty
+                                ? NetworkImage(userInfo['photoUrl'])
+                                : null,
+                            child: userInfo['photoUrl'] == null || userInfo['photoUrl'].toString().isEmpty
+                                ? const Icon(Icons.person, color: Colors.blue)
+                                : null,
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context.push('/rate/user123');
-                          },
-                          child: const Text('Calificar'),
-                        ),
-                      ],
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(userInfo['displayName'] ?? 'Usuario', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                GestureDetector(
+                                  onTap: () {
+                                    context.push('/listing/${widget.index}/reviews');
+                                  },
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.star, color: Colors.orange, size: 16),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${listing.rating} (Reseñas)',
+                                        style: TextStyle(
+                                          color: Colors.blue.shade600,
+                                          fontSize: 14,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: const Text('Calificar'),
+                          ),
+                        ],
+                      ),
                     ),
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    error: (err, stack) => const Text('Error al cargar datos del arrendador'),
                   ),
                 ],
               ),
@@ -229,8 +252,28 @@ class ListingDetailScreen extends ConsumerWidget {
               width: double.infinity,
               height: 56,
               child: ElevatedButton(
-                onPressed: isEstudiante ? () {
-                  context.push('/chat/chat_123');
+                onPressed: isEstudiante && !_isStartingChat ? () async {
+                  setState(() {
+                    _isStartingChat = true;
+                  });
+                  try {
+                    final chatRoom = await ref.read(userChatsProvider.notifier).createOrGetChat(widget.index);
+                    if (mounted) {
+                      context.push('/chat/${chatRoom.id}');
+                    }
+                  } catch (e) {
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error al iniciar chat: $e'), backgroundColor: Colors.red),
+                      );
+                    }
+                  } finally {
+                    if (mounted) {
+                      setState(() {
+                        _isStartingChat = false;
+                      });
+                    }
+                  }
                 } : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1E3A5F),
@@ -239,7 +282,9 @@ class ListingDetailScreen extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('Contactar arrendador', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                child: _isStartingChat 
+                    ? const CircularProgressIndicator(color: Colors.white)
+                    : const Text('Contactar arrendador', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 8),

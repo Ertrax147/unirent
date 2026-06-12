@@ -52,6 +52,21 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    // Endpoint público para obtener info básica de otro usuario (ej: el dueño de una propiedad)
+    @GetMapping("/{uid}/public")
+    public ResponseEntity<Map<String, String>> getPublicUser(@PathVariable String uid) {
+        User user = userService.getUser(uid);
+        if (user != null) {
+            Map<String, String> publicInfo = Map.of(
+                "id", user.getId(),
+                "displayName", user.getDisplayName() != null ? user.getDisplayName() : "Usuario",
+                "photoUrl", user.getPhotoUrl() != null ? user.getPhotoUrl() : ""
+            );
+            return ResponseEntity.ok(publicInfo);
+        }
+        return ResponseEntity.notFound().build();
+    }
     
     // Endpoint para actualizar el rol del usuario
     @PutMapping("/{uid}/role")

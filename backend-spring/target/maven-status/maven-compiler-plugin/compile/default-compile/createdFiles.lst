@@ -3,10 +3,16 @@ com\example\demo\DemoApplication.class
 com\example\demo\models\Favorite.class
 com\example\demo\repositories\UserRepository.class
 com\example\demo\controllers\UserController.class
+com\example\demo\models\ChatRoom.class
 com\example\demo\DemoApplication$1.class
+com\example\demo\services\ChatService.class
+com\example\demo\repositories\ChatMessageRepository.class
 com\example\demo\models\User.class
 com\example\demo\services\ListingService.class
+com\example\demo\repositories\ChatRoomRepository.class
+com\example\demo\controllers\ChatController.class
 com\example\demo\repositories\ListingRepository.class
+com\example\demo\models\ChatMessage.class
 com\example\demo\repositories\FavoriteRepository.class
 com\example\demo\services\UserService.class
 com\example\demo\security\SecurityConfig.class
