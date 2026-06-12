@@ -17,13 +17,16 @@ public class Listing {
     private String rating;
     private String imageUrl; // Ruta del asset (ej. "assets/images/prop_0.png")
     
+    private Double latitude;
+    private Double longitude;
+    
     @Column(name = "owner_id")
     private String ownerId; // ID del Arrendador que publicó la propiedad
 
     // Constructor vacío requerido por JPA
     public Listing() {}
 
-    public Listing(String title, String price, String location, String type, String rating, String imageUrl, String ownerId) {
+    public Listing(String title, String price, String location, String type, String rating, String imageUrl, String ownerId, Double latitude, Double longitude) {
         this.title = title;
         this.price = price;
         this.location = location;
@@ -31,6 +34,8 @@ public class Listing {
         this.rating = rating;
         this.imageUrl = imageUrl;
         this.ownerId = ownerId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     // Getters y Setters
@@ -54,6 +59,12 @@ public class Listing {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+    
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
     
     public String getOwnerId() { return ownerId; }
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }

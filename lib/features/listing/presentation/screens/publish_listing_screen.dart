@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 import '../providers/listing_provider.dart';
 
 class PublishListingScreen extends ConsumerStatefulWidget {
@@ -17,6 +20,43 @@ class _PublishListingScreenState extends ConsumerState<PublishListingScreen> {
   final _descriptionController = TextEditingController();
   String _selectedType = 'Individual';
   bool _isLoading = false;
+  
+  // Coordenadas de Temuco por defecto
+  LatLng _selectedLocation = const LatLng(-38.7359, -72.5904);
+  final MapController _mapController = MapController();
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Los servicios de ubicación están deshabilitados.')));
+      return;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Permisos de ubicación denegados.')));
+        return;
+      }
+    }
+    
+    if (permission == LocationPermission.deniedForever) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Permisos denegados permanentemente.')));
+      return;
+    } 
+
+    Position position = await Geolocator.getCurrentPosition();
+    if (mounted) {
+      setState(() {
+        _selectedLocation = LatLng(position.latitude, position.longitude);
+      });
+      _mapController.move(_selectedLocation, 15.0);
+    }
+  }
 
   @override
   void dispose() {
@@ -48,6 +88,8 @@ class _PublishListingScreenState extends ConsumerState<PublishListingScreen> {
         'type': _selectedType,
         'rating': '5.0', // Default para nuevos
         'imageUrl': 'assets/images/prop_0.png', // Imagen MVP temporal
+        'latitude': _selectedLocation.latitude,
+        'longitude': _selectedLocation.longitude,
       });
 
       if (mounted) {
@@ -145,6 +187,64 @@ class _PublishListingScreenState extends ConsumerState<PublishListingScreen> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               ),
             ),
+            const SizedBox(height: 24),
+            
+            const Text('Ubicación en el mapa', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            const SizedBox(height: 4),
+            Text('Mueve el mapa o toca para ubicar el marcador', style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+            const SizedBox(height: 8),
+            Stack(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        initialCenter: _selectedLocation,
+                        initialZoom: 14.0,
+                        onTap: (tapPosition, point) {
+                          setState(() {
+                            _selectedLocation = point;
+                          });
+                        },
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.unirent.app',
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: _selectedLocation,
+                              width: 40,
+                              height: 40,
+                              child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 8,
+                  right: 8,
+                  child: FloatingActionButton.small(
+                    onPressed: _getCurrentLocation,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.my_location, color: Colors.blue),
+                  ),
+                ),
+              ],
+            ),
+
             const SizedBox(height: 80),
           ],
         ),

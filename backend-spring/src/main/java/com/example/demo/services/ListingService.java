@@ -42,7 +42,9 @@ public class ListingService {
                     "Individual", 
                     "4.8", 
                     "assets/images/prop_0.png",
-                    mockOwnerId
+                    mockOwnerId,
+                    -38.7495,
+                    -72.6173
             ));
             
             listingRepository.save(new Listing(
@@ -52,7 +54,9 @@ public class ListingService {
                     "Compartida", 
                     "4.5", 
                     "assets/images/prop_1.png",
-                    mockOwnerId
+                    mockOwnerId,
+                    -38.7240,
+                    -72.5800
             ));
             
             listingRepository.save(new Listing(
@@ -62,7 +66,9 @@ public class ListingService {
                     "Individual", 
                     "4.9", 
                     "assets/images/prop_2.png",
-                    mockOwnerId
+                    mockOwnerId,
+                    -38.7359,
+                    -72.5904
             ));
             
             listingRepository.save(new Listing(
@@ -72,7 +78,9 @@ public class ListingService {
                     "Estudio", 
                     "4.7", 
                     "assets/images/prop_3.png",
-                    mockOwnerId
+                    mockOwnerId,
+                    -38.7360,
+                    -72.6070
             ));
             
             System.out.println("¡Datos inyectados correctamente!");

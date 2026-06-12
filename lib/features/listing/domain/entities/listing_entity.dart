@@ -7,6 +7,8 @@ class ListingEntity {
   final String rating;
   final String imageUrl;
   final String ownerId;
+  final double? latitude;
+  final double? longitude;
 
   ListingEntity({
     required this.id,
@@ -17,6 +19,8 @@ class ListingEntity {
     required this.rating,
     required this.imageUrl,
     required this.ownerId,
+    this.latitude,
+    this.longitude,
   });
 
   factory ListingEntity.fromJson(Map<String, dynamic> json) {
@@ -29,6 +33,8 @@ class ListingEntity {
       rating: json['rating'] ?? '',
       imageUrl: json['imageUrl'] ?? 'assets/images/prop_0.png',
       ownerId: json['ownerId'] ?? '',
+      latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
+      longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
     );
   }
 }
