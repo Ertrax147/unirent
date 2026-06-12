@@ -32,6 +32,15 @@ class UserChatsNotifier extends AsyncNotifier<List<ChatRoomEntity>> {
     ref.invalidateSelf();
     return chatRoom;
   }
+
+  Future<ChatRoomEntity> agreeToRent(int chatRoomId) async {
+    final repository = ref.read(chatRepositoryProvider);
+    final chatRoom = await repository.agreeToRent(chatRoomId);
+    
+    // Refresh chats
+    ref.invalidateSelf();
+    return chatRoom;
+  }
 }
 
 // AutoDispose Provider para los mensajes de un chat específico con Polling
@@ -47,8 +56,8 @@ class ChatMessagesNotifier extends AutoDisposeFamilyAsyncNotifier<List<ChatMessa
     // Stop any previous timer
     _timer?.cancel();
 
-    // Start polling every 3 seconds
-    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+    // Start polling every 8 seconds
+    _timer = Timer.periodic(const Duration(seconds: 8), (_) {
       _pollMessages();
     });
 

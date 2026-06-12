@@ -23,6 +23,15 @@ public class ChatRoom {
     @Column(name = "last_message_time")
     private LocalDateTime lastMessageTime;
 
+    @Column(name = "student_agreed")
+    private Boolean studentAgreed = false;
+
+    @Column(name = "landlord_agreed")
+    private Boolean landlordAgreed = false;
+
+    @Column(name = "is_closed")
+    private Boolean isClosed = false;
+
     public ChatRoom() {}
 
     public ChatRoom(String studentId, String landlordId, Long listingId) {
@@ -30,6 +39,9 @@ public class ChatRoom {
         this.landlordId = landlordId;
         this.listingId = listingId;
         this.lastMessageTime = LocalDateTime.now();
+        this.studentAgreed = false;
+        this.landlordAgreed = false;
+        this.isClosed = false;
     }
 
     // Getters y Setters
@@ -47,4 +59,13 @@ public class ChatRoom {
 
     public LocalDateTime getLastMessageTime() { return lastMessageTime; }
     public void setLastMessageTime(LocalDateTime lastMessageTime) { this.lastMessageTime = lastMessageTime; }
+    
+    public boolean isStudentAgreed() { return studentAgreed != null ? studentAgreed : false; }
+    public void setStudentAgreed(Boolean studentAgreed) { this.studentAgreed = studentAgreed; }
+    
+    public boolean isLandlordAgreed() { return landlordAgreed != null ? landlordAgreed : false; }
+    public void setLandlordAgreed(Boolean landlordAgreed) { this.landlordAgreed = landlordAgreed; }
+    
+    public boolean isClosed() { return isClosed != null ? isClosed : false; }
+    public void setClosed(Boolean closed) { isClosed = closed; }
 }

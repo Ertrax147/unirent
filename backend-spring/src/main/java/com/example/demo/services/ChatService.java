@@ -63,4 +63,34 @@ public class ChatService {
     public List<ChatMessage> getMessages(Long chatRoomId) {
         return chatMessageRepository.findByChatRoomIdOrderByTimestampAsc(chatRoomId);
     }
+
+    @Transactional
+    public ChatRoom agreeToRent(Long chatRoomId, String userId) {
+        ChatRoom room = chatRoomRepository.findById(chatRoomId)
+            .orElseThrow(() -> new RuntimeException("ChatRoom not found"));
+
+        if (room.isClosed()) {
+            return room; // Ya cerrado
+        }
+
+        if (userId.equals(room.getStudentId())) {
+            room.setStudentAgreed(true);
+        } else if (userId.equals(room.getLandlordId())) {
+            room.setLandlordAgreed(true);
+        } else {
+            throw new RuntimeException("User not part of this chat");
+        }
+
+        if (room.isStudentAgreed() && room.isLandlordAgreed()) {
+            room.setClosed(true);
+            
+            // Cambiar estado de la casa a RENTED
+            listingRepository.findById(room.getListingId()).ifPresent(listing -> {
+                listing.setStatus("RENTED");
+                listingRepository.save(listing);
+            });
+        }
+
+        return chatRoomRepository.save(room);
+    }
 }

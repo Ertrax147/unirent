@@ -46,4 +46,13 @@ class ChatRepository {
       throw Exception('Error al enviar el mensaje: $e');
     }
   }
+
+  Future<ChatRoomEntity> agreeToRent(int chatRoomId) async {
+    try {
+      final response = await _apiClient.post('/chats/$chatRoomId/agree', {});
+      return ChatRoomEntity.fromJson(response);
+    } catch (e) {
+      throw Exception('Error al acordar el arriendo: $e');
+    }
+  }
 }

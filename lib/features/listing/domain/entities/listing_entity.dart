@@ -9,6 +9,7 @@ class ListingEntity {
   final String ownerId;
   final double? latitude;
   final double? longitude;
+  final String status;
 
   ListingEntity({
     required this.id,
@@ -21,6 +22,7 @@ class ListingEntity {
     required this.ownerId,
     this.latitude,
     this.longitude,
+    this.status = 'AVAILABLE',
   });
 
   factory ListingEntity.fromJson(Map<String, dynamic> json) {
@@ -35,6 +37,7 @@ class ListingEntity {
       ownerId: json['ownerId'] ?? '',
       latitude: json['latitude'] != null ? (json['latitude'] as num).toDouble() : null,
       longitude: json['longitude'] != null ? (json['longitude'] as num).toDouble() : null,
+      status: json['status'] ?? 'AVAILABLE',
     );
   }
 }

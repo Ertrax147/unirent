@@ -24,7 +24,10 @@ public class ListingController {
     // Endpoint para obtener todas las propiedades
     @GetMapping
     public ResponseEntity<List<Listing>> getAllListings() {
-        List<Listing> listings = listingService.getAllListings();
+        List<Listing> listings = listingService.getAllListings()
+            .stream()
+            .filter(l -> l.getStatus() == null || "AVAILABLE".equals(l.getStatus()))
+            .toList();
         return ResponseEntity.ok(listings);
     }
 

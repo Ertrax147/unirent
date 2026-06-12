@@ -22,6 +22,8 @@ public class Listing {
     
     @Column(name = "owner_id")
     private String ownerId; // ID del Arrendador que publicó la propiedad
+    
+    private String status = "AVAILABLE"; // AVAILABLE, RENTED
 
     // Constructor vacío requerido por JPA
     public Listing() {}
@@ -68,4 +70,7 @@ public class Listing {
     
     public String getOwnerId() { return ownerId; }
     public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
+    
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

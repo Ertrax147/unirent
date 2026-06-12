@@ -60,4 +60,12 @@ public class ChatController {
         List<ChatMessage> messages = chatService.getMessages(chatRoomId);
         return ResponseEntity.ok(messages);
     }
+
+    // Acordar arriendo
+    @PostMapping("/{chatRoomId}/agree")
+    public ResponseEntity<ChatRoom> agreeToRent(@AuthenticationPrincipal Jwt jwt, @PathVariable Long chatRoomId) {
+        String userId = jwt.getSubject();
+        ChatRoom updatedRoom = chatService.agreeToRent(chatRoomId, userId);
+        return ResponseEntity.ok(updatedRoom);
+    }
 }

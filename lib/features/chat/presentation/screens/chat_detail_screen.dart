@@ -4,6 +4,8 @@ import 'package:unirent/features/auth/presentation/providers/auth_provider.dart'
 import 'package:unirent/features/chat/presentation/providers/chat_provider.dart';
 import 'package:unirent/features/auth/presentation/providers/user_public_provider.dart';
 import 'package:unirent/features/listing/presentation/providers/listing_provider.dart';
+import 'package:unirent/features/chat/domain/entities/chat_room_entity.dart';
+import 'package:unirent/features/chat/presentation/screens/review_screen.dart';
 
 class ChatDetailScreen extends ConsumerStatefulWidget {
   final String chatId;
@@ -38,15 +40,16 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     final chatsState = ref.watch(userChatsProvider);
     String otherUserId = '';
     String propertyTitle = 'Propiedad';
+    ChatRoomEntity? currentChat;
     if (chatsState.value != null) {
       try {
-        final chat = chatsState.value!.firstWhere((c) => c.id == chatIdInt);
-        otherUserId = chat.studentId == myUserId ? chat.landlordId : chat.studentId;
+        currentChat = chatsState.value!.firstWhere((c) => c.id == chatIdInt);
+        otherUserId = currentChat.studentId == myUserId ? currentChat.landlordId : currentChat.studentId;
         
         final listingsState = ref.watch(listingsProvider);
         if (listingsState.value != null) {
           try {
-            final listing = listingsState.value!.firstWhere((l) => l.id == chat.listingId);
+            final listing = listingsState.value!.firstWhere((l) => l.id == currentChat!.listingId);
             propertyTitle = listing.title;
           } catch (_) {}
         }
@@ -91,6 +94,13 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
         ),
         backgroundColor: const Color(0xFF1E3A5F),
         foregroundColor: Colors.white,
+        actions: [
+          if (currentChat != null)
+            IconButton(
+              icon: const Icon(Icons.handshake),
+              onPressed: () => _showAgreementDialog(context, currentChat!, myUserId),
+            ),
+        ],
       ),
       body: Column(
         children: [
@@ -208,6 +218,115 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showAgreementDialog(BuildContext context, ChatRoomEntity chat, String myUserId) {
+    final isStudent = chat.studentId == myUserId;
+    final iAgreed = isStudent ? chat.studentAgreed : chat.landlordAgreed;
+    final otherAgreed = isStudent ? chat.landlordAgreed : chat.studentAgreed;
+    final isClosed = chat.isClosed;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.handshake, color: Colors.orange, size: 24),
+              const SizedBox(width: 8),
+              const Flexible(
+                child: Text(
+                  'Acuerdo de Arriendo',
+                  style: TextStyle(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isClosed) ...[
+                const Text('¡Felicidades! 🎉', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                const SizedBox(height: 8),
+                const Text('El arriendo se ha concretado exitosamente. La propiedad ya no está visible para otros estudiantes.'),
+              ] else if (iAgreed && !otherAgreed) ...[
+                const Text('Has confirmado tu intención de arrendar.', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                const Text('Estamos esperando a que la otra persona también confirme. Una vez que ambos acepten, el arriendo se concretará.'),
+              ] else if (!iAgreed && otherAgreed) ...[
+                const Text('La otra persona ya confirmó su intención de arrendar.', style: TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text(isStudent 
+                  ? '¿Confirmas que deseas arrendar esta propiedad?' 
+                  : '¿Confirmas que le arrendarás a este estudiante?'),
+              ] else ...[
+                Text(isStudent 
+                  ? '¿Confirmas tu intención de arrendar esta propiedad?' 
+                  : '¿Confirmas tu intención de arrendarle a este estudiante?'),
+                const SizedBox(height: 8),
+                const Text('Al confirmar ambas partes, la propiedad dejará de estar disponible para el resto.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              ],
+            ],
+          ),
+          actions: [
+            if (isClosed) ...[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ReviewScreen(
+                        chatRoomId: chat.id,
+                        otherUserName: isStudent
+                          ? (ref.read(userPublicProvider(chat.landlordId)).valueOrNull?['displayName'] ?? 'Arrendador')
+                          : (ref.read(userPublicProvider(chat.studentId)).valueOrNull?['displayName'] ?? 'Estudiante'),
+                        otherUserId: isStudent ? chat.landlordId : chat.studentId,
+                        isStudent: isStudent,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange, foregroundColor: Colors.white),
+                child: const Text('Calificar ahora'),
+              ),
+            ] else ...[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(iAgreed ? 'Cerrar' : 'Cancelar'),
+              ),
+              if (!iAgreed)
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    try {
+                      await ref.read(userChatsProvider.notifier).agreeToRent(chat.id);
+                      // Invalidar el provider de listings para que desaparezca la propiedad si el acuerdo se completó
+                      ref.invalidate(listingsProvider);
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('¡Acuerdo confirmado!')));
+                      }
+                    } catch (e) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF1E3A5F), foregroundColor: Colors.white),
+                  child: const Text('Confirmar Arriendo'),
+                ),
+            ],
+          ],
+        );
+      },
     );
   }
 }
