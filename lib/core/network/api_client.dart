@@ -68,4 +68,18 @@ class ApiClient {
       throw Exception('Failed API PUT call: ${response.statusCode}');
     }
   }
+
+  Future<dynamic> delete(String endpoint) async {
+    final headers = await _getHeaders();
+    final response = await http.delete(
+      Uri.parse('$baseUrl$endpoint'),
+      headers: headers,
+    ).timeout(const Duration(seconds: 10));
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return response.body.isNotEmpty ? jsonDecode(response.body) : null;
+    } else {
+      throw Exception('Failed API DELETE call: ${response.statusCode}');
+    }
+  }
 }

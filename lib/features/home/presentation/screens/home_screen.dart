@@ -90,15 +90,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         case 0:
           return homeBody;
         case 1:
-          final favoriteIds = ref.watch(favoritesProvider);
+          final favoriteState = ref.watch(favoritesProvider);
+          if (favoriteState.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final favoriteIds = favoriteState.value ?? [];
           if (favoriteIds.isEmpty) {
             return const Center(child: Text('Aún no tienes favoritos.'));
           }
+
+          final listingsState = ref.watch(listingsProvider);
+          if (listingsState.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final allListings = listingsState.value ?? [];
+          final favoriteListings = allListings.where((l) => favoriteIds.contains(l.id)).toList();
+
+          if (favoriteListings.isEmpty) {
+            return const Center(child: Text('Tus favoritos no están disponibles.'));
+          }
+
           return ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            itemCount: favoriteIds.length,
+            padding: const EdgeInsets.only(bottom: 80),
+            itemCount: favoriteListings.length,
             itemBuilder: (context, index) {
-              return const Center(child: Text('Favoritos en construcción para backend'));
+              return _ListingCard(listing: favoriteListings[index], index: favoriteListings[index].id);
             },
           );
         case 2:
@@ -251,7 +267,7 @@ class _ListingCard extends ConsumerWidget {
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: HoverHeartButton(index: index, iconSize: 16),
+                    child: HoverHeartButton(index: listing.id, iconSize: 16),
                   ),
                 ),
               ],

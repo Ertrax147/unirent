@@ -6,6 +6,7 @@ class ListingEntity {
   final String type;
   final String rating;
   final String imageUrl;
+  final String ownerId;
 
   ListingEntity({
     required this.id,
@@ -15,6 +16,7 @@ class ListingEntity {
     required this.type,
     required this.rating,
     required this.imageUrl,
+    required this.ownerId,
   });
 
   factory ListingEntity.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class ListingEntity {
       type: json['type'] ?? '',
       rating: json['rating'] ?? '',
       imageUrl: json['imageUrl'] ?? 'assets/images/prop_0.png',
+      ownerId: json['ownerId'] ?? '',
     );
   }
 }

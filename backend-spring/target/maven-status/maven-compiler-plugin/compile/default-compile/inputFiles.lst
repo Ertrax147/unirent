@@ -1,10 +1,14 @@
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\security\SecurityConfig.java
-C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\services\ListingService.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\models\User.java
-C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\controllers\ListingController.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\models\Listing.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\services\UserService.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\controllers\UserController.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\DemoApplication.java
-C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\repositories\ListingRepository.java
 C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\repositories\UserRepository.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\controllers\FavoriteController.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\services\ListingService.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\controllers\ListingController.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\repositories\FavoriteRepository.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\services\FavoriteService.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\models\Favorite.java
+C:\Users\FRANCISCA PC\Desktop\unirent\backend-spring\src\main\java\com\example\demo\repositories\ListingRepository.java

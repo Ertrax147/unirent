@@ -16,17 +16,21 @@ public class Listing {
     private String type; // Individual, Compartida, Estudio
     private String rating;
     private String imageUrl; // Ruta del asset (ej. "assets/images/prop_0.png")
+    
+    @Column(name = "owner_id")
+    private String ownerId; // ID del Arrendador que publicó la propiedad
 
     // Constructor vacío requerido por JPA
     public Listing() {}
 
-    public Listing(String title, String price, String location, String type, String rating, String imageUrl) {
+    public Listing(String title, String price, String location, String type, String rating, String imageUrl, String ownerId) {
         this.title = title;
         this.price = price;
         this.location = location;
         this.type = type;
         this.rating = rating;
         this.imageUrl = imageUrl;
+        this.ownerId = ownerId;
     }
 
     // Getters y Setters
@@ -50,4 +54,7 @@ public class Listing {
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    
+    public String getOwnerId() { return ownerId; }
+    public void setOwnerId(String ownerId) { this.ownerId = ownerId; }
 }

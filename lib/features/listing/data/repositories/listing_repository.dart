@@ -16,4 +16,13 @@ class ListingRepository {
       throw Exception('Error fetching listings from Spring Boot: $e');
     }
   }
+
+  Future<ListingEntity> createListing(Map<String, dynamic> listingData) async {
+    try {
+      final response = await _apiClient.post('/listings', listingData);
+      return ListingEntity.fromJson(response);
+    } catch (e) {
+      throw Exception('Error creating listing: $e');
+    }
+  }
 }

@@ -23,7 +23,8 @@ class _HoverHeartButtonState extends ConsumerState<HoverHeartButton> {
 
   @override
   Widget build(BuildContext context) {
-    final isFavorite = ref.watch(favoritesProvider).contains(widget.index);
+    final favoritesState = ref.watch(favoritesProvider);
+    final isFavorite = favoritesState.value?.contains(widget.index) ?? false;
 
     return MouseRegion(
       cursor: SystemMouseCursors.click,
