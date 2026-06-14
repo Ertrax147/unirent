@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: unirent-backend
+  jackson:
+    property-naming-strategy: SNAKE_CASE 
+
+firebase:
+  config-path: classpath:firebase-service-account.json 
+
+server:
+  port: 8080 

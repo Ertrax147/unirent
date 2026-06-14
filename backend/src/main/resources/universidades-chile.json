@@ -1,0 +1,505 @@
+[
+{
+    "web_pages": ["http://www.academia.cl/"],
+    "name": "Universidad Academia de Humanismo Cristiano",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["academia.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.arquitecturaucv.cl/"],
+    "name": "Escuela de Arquitectura y Diseño",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["arquitecturaucv.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["https://www.uc.cl/"],
+    "name": "Pontificia Universidad Catolica de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uc.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uach.cl/"],
+    "name": "Universidad Austral de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uach.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uaconcagua.cl/"],
+    "name": "Universidad de Aconcagua",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uaconcagua.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uahurtado.cl/"],
+    "name": "Universidad Alberto Hurtado",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uahurtado.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uai.cl/"],
+    "name": "Universidad Adolfo Ibáñez",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uai.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uamericas.cl/"],
+    "name": "Universidad de Las Américas",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uamericas.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uandes.cl/"],
+    "name": "Universidad de Los Andes",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uandes.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uantof.cl/"],
+    "name": "Universidad de Antofagasta",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uantof.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uas.cl/"],
+    "name": "Universidad Autonoma del Sur",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uas.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ubiobio.cl/"],
+    "name": "Universidad del Bío-Bío",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ubiobio.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ubohiggins.cl/"],
+    "name": "Universidad Bernardo O'Higgins",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ubohiggins.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ubolivariana.cl/"],
+    "name": "Universidad Bolivariana",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ubolivariana.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ubritanica.cl/"],
+    "name": "Universidad Chileno Britanica de Cultura",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ubritanica.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucentral.cl/"],
+    "name": "Universidad Central",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucentral.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucervantes.cl/"],
+    "name": "Universidad Miguel de Cervantes",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucervantes.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uchile.cl/"],
+    "name": "Universidad de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uchile.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucinf.cl/"],
+    "name": "Universidad de Ciencias de la Informatica",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucinf.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucm.cl/"],
+    "name": "Universidad Catolica del Maule",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucm.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucn.cl/"],
+    "name": "Universidad Catolica del Norte",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucn.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucsc.cl/"],
+    "name": "Universidad Catolica de La Santísima Concepción",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucsc.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucsh.cl/"],
+    "name": "Universidad Católica Cardenal Raúl Silva Henríquez",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucsh.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uctem.cl/"],
+    "name": "Universidad Catolica de Temuco",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uctem.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ucv.cl/"],
+    "name": "Universidad Catolica de Valparaiso",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ucv.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uda.cl/"],
+    "name": "Universidad de Atacama",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uda.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.udec.cl/"],
+    "name": "Universidad de Concepcion",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["udec.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.udelmar.cl/"],
+    "name": "Universidad del Mar",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["udelmar.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.udesarrollo.cl/"],
+    "name": "Universidad del Desarrollo",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["udesarrollo.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.udp.cl/"],
+    "name": "Universidad Diego Portales",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["udp.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ufinis.cl/"],
+    "name": "Universidad Finis Terrae",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ufinis.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ufro.cl/"],
+    "name": "Universidad de La Frontera",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ufro.cl", "ufromail.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ugm.cl/"],
+    "name": "Universidad Gabriela Mistral",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ugm.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uisek.cl/"],
+    "name": "Universidad International SEK, Santiago",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uisek.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ujso.cl/"],
+    "name": "Universidad José Santos Ossa",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ujso.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ulagos.cl/"],
+    "name": "Universidad de Los Lagos",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ulagos.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ulare.cl/"],
+    "name": "Universidad La Republica",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ulare.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.umag.cl/"],
+    "name": "Universidad de Magallanes",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["umag.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.umaritima.cl/"],
+    "name": "Universidad Maritima de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["umaritima.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.umayor.cl/"],
+    "name": "Universidad Mayor",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["umayor.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.umce.cl/"],
+    "name": "Universidad Metropolitana de Ciencias de la Educación",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["umce.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ume.cl/"],
+    "name": "Universidad Mariano Egaña",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ume.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.unab.cl/"],
+    "name": "Universidad Nacional Andrés Bello",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["unab.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.unachile.cl/"],
+    "name": "Universidad Adventista de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["unachile.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.unap.cl/"],
+    "name": "Universidad \"Arturo Prat\"",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["unap.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.unfa.cl/"],
+    "name": "Universidad Francisco de Aguirre",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["unfa.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uniacc.cl/"],
+    "name": "Universidad de Artes, Ciencias y Comunicación",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uniacc.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.unicit.cl/"],
+    "name": "Universidad Iberoamericana de Ciencias y Tecnologia",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["unicit.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.universidadarcis.cl/"],
+    "name": "Universidad Arcis",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["universidadarcis.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.upacifico.cl/"],
+    "name": "Universidad del Pacífico",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["upacifico.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.upa.cl/"],
+    "name": "Universidad de Playa Ancha de Ciencias de la Educacion",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["upa.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.usach.cl/"],
+    "name": "Universidad de Santiago de Chile",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["usach.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.usanandres.cl/"],
+    "name": "Universidad de San Andres",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["usanandres.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.userena.cl/"],
+    "name": "Universidad de La Serena",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["userena.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uss.cl/"],
+    "name": "Universidad San Sebastian",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uss.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.ust.cl/"],
+    "name": "Universidad Santo Tomás",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["ust.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uta.cl/"],
+    "name": "Universidad de Tarapacá",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uta.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.utalca.cl/"],
+    "name": "Universidad de Talca",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["utalca.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.utem.cl/"],
+    "name": "Universidad Tecnológica Metropolitana",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["utem.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.utfsm.cl/"],
+    "name": "Universidad Técnica \"Federico Santa María\"",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["utfsm.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uv.cl/"],
+    "name": "Universidad de Valparaiso",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uv.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uvipro.cl/"],
+    "name": "Universidad Tecnologica \"Vicente Perez Rosales\"",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uvipro.cl"],
+    "country": "Chile"
+  },
+  {
+    "web_pages": ["http://www.uvm.cl/"],
+    "name": "Universidad de Viña del Mar",
+    "alpha_two_code": "CL",
+    "state-province": null,
+    "domains": ["uvm.cl"],
+    "country": "Chile"
+  }]
